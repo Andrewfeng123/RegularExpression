@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-typedef char alphabet;      // allowed characters: a-z
-
 struct transition {
   std::map<int, std::map<char, std::set<int>>> table;   // transition table sto-
                                                         // ring nodes as keys
@@ -22,6 +20,12 @@ struct transition {
 */
 class NFA {
  public:
+  
+    /*
+        Initialize NFA with the given alphabet
+    */
+    NFA(std::set<char> alphabet);
+
     /* 
         Whether this NFA accepts <str> as input
     */
@@ -44,6 +48,7 @@ class NFA {
 
  private:
     transition delta;               // contains all the states & transitions
+    std::set<char> alphabet;        // set of alphabet
     std::set<int> accepted_states;  // set of accepted states
     int q0;                         // initial state
 };
