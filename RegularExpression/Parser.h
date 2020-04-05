@@ -4,13 +4,11 @@
 #include <string>
 #include <vector>
 
-struct transition {
-  std::map<int, std::map<char, std::set<int>>> table;   // transition table sto-
-                                                        // ring nodes as keys
-                                                        // and a map from char 
-                                                        // to set of int
-                                                        // as transitions;
-};
+/*
+    transition table storing nodes as keys and a map from char to set of int as
+    transitions
+*/
+typedef std::map<int, std::map<char, std::set<int>>> transition;
 
 /*
     A C++ implementation of a Nondeterministic Finite State Autonmata (NFA)
@@ -55,15 +53,21 @@ class NFA {
 
 class Parser {
  public:
-    int id_count = 0;       // counts the id used up by all the NFA's to make 
-                            // sure no NFA have repeated nodes
+    /*
+        Parser that parses regular expression over <alphabet>
+    */
+    Parser(std::set<char> alphabet);
+    std::set<char> alphabet;
+    int id_count;       // counts the id used up by all the NFA's to make 
+                        // sure no NFA have repeated nodes
 
     /*
         Parse the regular expression into a NFA
+        -<str> is a valid regular expression (spaces are fine)
     */
-    NFA parse_regex(const std::string& expression);
+    NFA parse_regex(const std::string& str);
 
- private:
+ //private:
     std::vector<char> str_to_tokens(const std::string& expression);
     std::vector<char> tokens_to_RPN(std::vector<char> tokens);
     NFA RPN_to_NFA(std::vector<char> RPN);
