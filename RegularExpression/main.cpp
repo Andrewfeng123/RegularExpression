@@ -1,16 +1,32 @@
 #include "Parser.h"
 #include <assert.h>
+#include <iostream>
 int main() { 
-    Parser parser({'a', 'b', 'c'});
-
-    // strings that start with a and has b for remaining characters
-    NFA nfa = parser.parse_regex("ab*");
-    assert(nfa.accepts("ab") && nfa.accepts("abbb"));
+    Parser parser({'a', 'b', 'c', 'd'});
 
     // strings that start with a and end with b
-    nfa = parser.parse_regex("a(a+b)*b");
-    assert(nfa.accepts("abab") && nfa.accepts("aabababbaab"));
-    std::vector<char> char_arr = parser.str_to_tokens("aabb(a+b+c)*(bab+c)");
-    char_arr = parser.tokens_to_RPN(char_arr);
-    getchar();
+    NFA nfa = parser.parse_regex("(a(a+b)*b)*");
+    nfa.simplify();
+    assert(nfa.accepts("abab") && !nfa.accepts("babababbaab"));
+    
+    while(true) {
+        std::cout << "Enter regular expression (^ to exit): \n" ;
+        std::string input;
+        std::cin >> input;
+        if(input == "^")
+            break;
+        nfa = parser.parse_regex(input);    nfa.simplify();
+        while(true) {
+            std::cout << "Enter a string (^ to exit): \n";
+            std::cin >> input;
+            if(input == "^")
+                break;
+            if(nfa.accepts(input)) {
+                std::cout << "Accepted!\n";
+            } else {
+                std::cout << "Rejected!\n";
+            }
+        }
+    }
+    return 0;
 }

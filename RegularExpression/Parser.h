@@ -30,25 +30,41 @@ class NFA {
     bool accepts(const std::string& str);
 
     /*
+        Returns the string representation of this NFA
+    */
+    std::string str();
+
+    /*
+        Simplifies the NFA by removing & transitions
+    */
+    void simplify();
+
+    /*
         Generates an NFA that admits strings in L(<a>)*
     */
     static NFA kleene_star(NFA a);
 
     /*
         Generates an NFA that admits strings in L(<a>) union L(<b>)
+        -<a> and <b> are over the same alphabet
     */
-    static NFA combine(NFA a, NFA b);
+    static NFA combine(NFA a, NFA b, int new_q0);
 
     /*
         Generates an NFA that admits strings in L(<a><b>)
+        -<a> and <b> are over the same alphabet
     */
     static NFA concat(NFA a, NFA b);
 
- private:
+
     transition delta;               // contains all the states & transitions
     std::set<char> alphabet;        // set of alphabet
-    std::set<int> accepted_states;  // set of accepted states
+    std::set<int> accepted_states;  // set of accepted states; invariant: this
+                                    // is a subset of the keys of <delta>
     int q0;                         // initial state
+
+private:
+    std::set<int> _tr(int state, std::set<int>* traversed);
 };
 
 class Parser {
@@ -67,7 +83,7 @@ class Parser {
     */
     NFA parse_regex(const std::string& str);
 
- //private:
+ private:
     std::vector<char> str_to_tokens(const std::string& expression);
     std::vector<char> tokens_to_RPN(std::vector<char> tokens);
     NFA RPN_to_NFA(std::vector<char> RPN);
