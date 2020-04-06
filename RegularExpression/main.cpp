@@ -16,6 +16,7 @@ int main() {
         if(input == "^")
             break;
         nfa = parser.parse_regex(input);    nfa.simplify();
+        std::cout << nfa.str();
         while(true) {
             std::cout << "Enter a string (^ to exit): \n";
             std::cin >> input;

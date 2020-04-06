@@ -231,7 +231,7 @@ NFA Parser::RPN_to_NFA(std::vector<char> RPN) {
             case '+': {
                 NFA b = st.top(); st.pop();
                 NFA a = st.top(); st.pop();
-                st.push(NFA::combine(a, b, id_count));
+                st.push(NFA::combine(a, b, id_count++));
                 break;}
             }
         }else {
